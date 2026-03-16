@@ -21,3 +21,5 @@ app.listen(process.env.PORT, () => {
 // Added lower line after  creatinng authroutes
 const authRoutes = require("./routes/AuthRoutes");
 app.use("/api/auth", authRoutes); // when ever server listen /api/auth it will send to auth request
+const expenseRoutes = require("./routes/expenseRoutes");
+app.use("/api/expenses", expenseRoutes);

@@ -1,33 +1,23 @@
-//this file is created for checking jwt tokens send by user. if it is correct then go ahead if not then request denied
 const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
-
   try {
 
-    // 1️⃣ get token from request header
-    const token = req.header("Authorization");
+    const token = req.headers.authorization;
 
-    // 2️⃣ if token not present
     if (!token) {
-      return res.status(401).json({ message: "Access denied. No token." });
+      return res.status(401).json({ message: "No token, authorization denied" });
     }
 
-    // 3️⃣ verify token
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 4️⃣ attach user info to request
-    req.user = verified;
+    req.user = decoded;
 
-    // 5️⃣ continue to next function
     next();
 
   } catch (error) {
-
-    res.status(400).json({ message: "Invalid Token" });
-
+    res.status(401).json({ message: "Token is not valid" });
   }
-
 };
 
 module.exports = authMiddleware;
